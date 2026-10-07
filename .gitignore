@@ -1,0 +1,13 @@
+# Terraform working files and state
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# Secrets and local environment files
+.env
+*.env
+secrets/
+
+# Node
+node_modules/
