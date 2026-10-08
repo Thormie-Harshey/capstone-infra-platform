@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tasks</title>
+  <style>
+    body { font-family: sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+    input { padding: 8px; width: 70%; }
+    button { padding: 8px 12px; }
+    li { padding: 6px 0; border-bottom: 1px solid #ddd; }
+    footer { margin-top: 24px; color: #888; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Tasks</h1>
+  <input id="title" placeholder="New task">
+  <button id="add">Add</button>
+  <ul id="list"></ul>
+  <footer>Frontend version __VERSION__</footer>
+
+  <script>
+    async function load() {
+      const res = await fetch("/api/tasks");
+      const tasks = await res.json();
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+      tasks.forEach(t => {
+        const li = document.createElement("li");
+        li.textContent = t.title;
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById("add").onclick = async () => {
+      const input = document.getElementById("title");
+      if (!input.value.trim()) return;
+      await fetch("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: input.value })
+      });
+      input.value = "";
+      load();
+    };
+
+    load();
+  </script>
+</body>
+</html>
