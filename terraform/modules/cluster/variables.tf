@@ -4,7 +4,7 @@ variable "name" {
 
 variable "kubernetes_version" {
   type    = string
-  default = "1.37"
+  default = "1.36"
 }
 
 variable "cluster_role_arn" {

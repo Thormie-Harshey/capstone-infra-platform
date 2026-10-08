@@ -37,9 +37,9 @@ resource "aws_iam_role" "node" {
 
 resource "aws_iam_role_policy_attachment" "node" {
   for_each = toset([
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",          # join the cluster
-    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",               # give pods VPC addresses
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly", # pull AWS system images
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",            # join the cluster
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",                 # give pods VPC addresses
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",   # pull AWS system images
     "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy" # create disks for the database
   ])
   role       = aws_iam_role.node.name
