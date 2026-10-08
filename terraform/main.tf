@@ -52,4 +52,5 @@ module "cluster" {
   private_subnet_ids        = module.networking.private_subnet_ids
   cluster_security_group_id = module.security.cluster_security_group_id
   admin_cidrs               = var.admin_cidrs
+  secrets_kms_key_arn       = module.security.eks_secrets_kms_key_arn
 }

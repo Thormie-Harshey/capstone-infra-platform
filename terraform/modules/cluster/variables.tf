@@ -32,3 +32,8 @@ variable "node_instance_type" {
   type    = string
   default = "t3.medium"
 }
+
+variable "secrets_kms_key_arn" {
+  description = "KMS key used to encrypt Kubernetes Secrets"
+  type        = string
+}

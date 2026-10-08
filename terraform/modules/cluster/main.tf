@@ -21,6 +21,14 @@ resource "aws_eks_cluster" "main" {
   upgrade_policy {
     support_type = "STANDARD"
   }
+
+  # Encrypt Kubernetes Secrets with our KMS key
+  encryption_config {
+    resources = ["secrets"]
+    provider {
+      key_arn = var.secrets_kms_key_arn
+    }
+  }
 }
 
 resource "aws_eks_node_group" "main" {
