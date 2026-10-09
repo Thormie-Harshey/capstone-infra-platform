@@ -59,6 +59,10 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 20
             failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "10"]
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

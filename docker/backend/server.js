@@ -14,6 +14,12 @@ const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
+// If the database drops idle connections (for example during a restart),
+// log it instead of crashing the whole program
+pool.on("error", (err) => {
+  console.error("Database pool error:", err.message);
+});
+
 // Liveness: is the program running?
 app.get("/api/health/live", (req, res) => res.json({ status: "alive" }));
 
@@ -23,6 +29,7 @@ app.get("/api/health/ready", async (req, res) => {
     await pool.query("SELECT 1");
     res.json({ status: "ready" });
   } catch (err) {
+    console.error("Readiness check failed:", err.message);
     res.status(503).json({ status: "not ready" });
   }
 });

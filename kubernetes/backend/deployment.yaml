@@ -35,7 +35,7 @@ spec:
               app: backend
       containers:
         - name: backend
-          image: thormie/tasks-backend:1.0.0
+          image: thormie/tasks-backend:1.1.0
           ports:
             - containerPort: 3000
           envFrom:
@@ -64,6 +64,10 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 20
             failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "10"]
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
