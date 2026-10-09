@@ -177,6 +177,7 @@ echo "Open http://$LB in a browser"
 | Horizontal Pod Autoscaler active | [13](docs/screenshots/13-hpa-active.png) |
 | Database data persists across pod restarts | [14](docs/screenshots/14-data-persists-after-restart.png) |
 | Rolling update with zero downtime (0 failed requests) | [15](docs/screenshots/15-rolling-update-zero-downtime.png) |
+| Cleanup instructions verified: all resources destroyed, no clusters remain | [16](docs/screenshots/16-teardown-complete.png) |
 
 ## Design decisions and trade-offs
 
