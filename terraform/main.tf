@@ -53,4 +53,5 @@ module "cluster" {
   cluster_security_group_id = module.security.cluster_security_group_id
   admin_cidrs               = var.admin_cidrs
   secrets_kms_key_arn       = module.security.eks_secrets_kms_key_arn
+  ebs_csi_role_arn          = module.security.ebs_csi_role_arn
 }

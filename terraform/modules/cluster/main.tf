@@ -51,9 +51,29 @@ resource "aws_eks_node_group" "main" {
   }
 }
 
+# Lets pods get their own IAM role instead of borrowing the node's
+resource "aws_eks_addon" "pod_identity_agent" {
+  cluster_name = aws_eks_cluster.main.name
+  addon_name   = "eks-pod-identity-agent"
+  depends_on   = [aws_eks_node_group.main]
+}
+
 # The disk tool, so the database can get its own storage
 resource "aws_eks_addon" "ebs_csi" {
   cluster_name = aws_eks_cluster.main.name
   addon_name   = "aws-ebs-csi-driver"
+
+  pod_identity_association {
+    role_arn        = var.ebs_csi_role_arn
+    service_account = "ebs-csi-controller-sa"
+  }
+
+  depends_on = [aws_eks_node_group.main, aws_eks_addon.pod_identity_agent]
+}
+
+# Live CPU and memory numbers, needed by the HPA and kubectl top
+resource "aws_eks_addon" "metrics_server" {
+  cluster_name = aws_eks_cluster.main.name
+  addon_name   = "metrics-server"
   depends_on   = [aws_eks_node_group.main]
 }

@@ -37,10 +37,9 @@ resource "aws_iam_role" "node" {
 
 resource "aws_iam_role_policy_attachment" "node" {
   for_each = toset([
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",            # join the cluster
-    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",                 # give pods VPC addresses
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",   # pull AWS system images
-    "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy" # create disks for the database
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",          # join the cluster
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",               # give pods VPC addresses
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly", # pull AWS system images
   ])
   role       = aws_iam_role.node.name
   policy_arn = each.value
@@ -95,4 +94,25 @@ resource "aws_iam_role_policy" "cluster_kms" {
       Resource = aws_kms_key.eks_secrets.arn
     }]
   })
+}
+
+# ---------- EBS CSI controller role (worn by the disk tool's pods via Pod Identity) ----------
+data "aws_iam_policy_document" "ebs_csi_assume" {
+  statement {
+    actions = ["sts:AssumeRole", "sts:TagSession"]
+    principals {
+      type        = "Service"
+      identifiers = ["pods.eks.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ebs_csi" {
+  name               = "${var.name}-ebs-csi-role"
+  assume_role_policy = data.aws_iam_policy_document.ebs_csi_assume.json
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi" {
+  role       = aws_iam_role.ebs_csi.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
 }

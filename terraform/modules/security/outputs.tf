@@ -16,3 +16,7 @@ output "node_role_arn" {
 output "cluster_security_group_id" {
   value = aws_security_group.cluster.id
 }
+output "ebs_csi_role_arn" {
+  value      = aws_iam_role.ebs_csi.arn
+  depends_on = [aws_iam_role_policy_attachment.ebs_csi]
+}

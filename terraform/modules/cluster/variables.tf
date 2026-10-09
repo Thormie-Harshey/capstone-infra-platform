@@ -37,3 +37,7 @@ variable "secrets_kms_key_arn" {
   description = "KMS key used to encrypt Kubernetes Secrets"
   type        = string
 }
+variable "ebs_csi_role_arn" {
+  description = "IAM role for the EBS CSI controller (Pod Identity)"
+  type        = string
+}
